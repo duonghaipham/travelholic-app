@@ -1,6 +1,16 @@
 <resources>
     <string name="app_name">travelholic-app</string>
     <string name="login">Login</string>
-    <string name="account">Account</string>
+    <string name="account">Email/Phone</string>
     <string name="password">Password</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="email">Email</string>
+    <string name="phone">Phone</string>
+    <string name="full_name">Full name</string>
+    <string name="signup">Sign up</string>
+    <string name="forget_password">Select method you want to request your password</string>
+    <string name="via_sms">Via SMS</string>
+    <string name="via_email">Via Email</string>
+    <string name="submit">Submit</string>
+    <string name="account_hint">Enter your email/password</string>
 </resources>

@@ -24,11 +24,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_login"
+        android:textAllCaps="true"
         android:textSize="20sp"
         android:text="@string/account" />
 
     <EditText
-        android:id="@+id/et_account"
+        android:id="@+id/txt_account"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_account"
@@ -41,13 +42,14 @@
         android:id="@+id/tv_password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/et_account"
+        android:layout_below="@+id/txt_account"
         android:layout_marginTop="20dp"
+        android:textAllCaps="true"
         android:textSize="20sp"
         android:text="@string/password" />
 
     <EditText
-        android:id="@+id/et_password"
+        android:id="@+id/txt_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_password"
@@ -61,7 +63,7 @@
         android:id="@+id/btn_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/et_password"
+        android:layout_below="@+id/txt_password"
         android:layout_marginTop="30dp"
         android:padding="13dp"
         android:backgroundTint="@color/blue_lapis"
