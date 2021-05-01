@@ -15,6 +15,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         map();
+//        btnLogin.setOnClickListener(v -> {
+//            Intent intent = new Intent(MainActivity.this, ToursActivity.class);
+//            startActivity(intent);
+//        });
     }
 
     private void map() {
