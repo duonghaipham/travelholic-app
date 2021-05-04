@@ -9,6 +9,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
 
+import com.example.travelholic.fragment.MapsFragment;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.List;
@@ -34,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
         PageAdapter adapter = new PageAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
 //        adapter.addFragment(new ToursFragment());
-//        adapter.addFragment(new MapFragment());
+        adapter.addFragment(new MapsFragment());
 //        adapter.addFragment(new HistoryFragment());
 //        adapter.addFragment(new SettingFragment());
 
