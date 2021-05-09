@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:paddingStart="20dp"
     android:paddingEnd="20dp"
-    tools:context=".LoginActivity">
+    tools:context=".SignupActivity">
 
     <TextView
         android:id="@+id/tv_fullname"
@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_fullname"
         android:layout_marginTop="5dp"
-        android:background="@drawable/edittext_background"
+        android:background="@drawable/edit_selector_background"
         android:padding="13dp"
         android:textSize="20sp"/>
 
@@ -43,7 +43,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_email"
         android:layout_marginTop="5dp"
-        android:background="@drawable/edittext_background"
+        android:background="@drawable/edit_selector_background"
         android:padding="13dp"
         android:textSize="20sp"/>
 
@@ -63,7 +63,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_phone"
         android:layout_marginTop="5dp"
-        android:background="@drawable/edittext_background"
+        android:background="@drawable/edit_selector_background"
         android:padding="13dp"
         android:textSize="20sp"/>
 
@@ -84,7 +84,7 @@
         android:layout_below="@+id/tv_password"
         android:layout_marginTop="5dp"
         android:padding="13dp"
-        android:background="@drawable/edittext_background"
+        android:background="@drawable/edit_selector_background"
         android:inputType="textPassword"
         android:textSize="20sp"/>
 
@@ -105,7 +105,7 @@
         android:layout_below="@+id/tv_confirm_password"
         android:layout_marginTop="5dp"
         android:padding="13dp"
-        android:background="@drawable/edittext_background"
+        android:background="@drawable/edit_selector_background"
         android:inputType="textPassword"
         android:textSize="20sp"/>
 

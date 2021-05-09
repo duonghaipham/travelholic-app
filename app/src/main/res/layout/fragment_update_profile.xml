@@ -58,7 +58,7 @@
             android:layout_below="@+id/tv_update_email"
             android:layout_marginTop="5dp"
             android:padding="13dp"
-            android:background="@drawable/edittext_background"
+            android:background="@drawable/edit_selector_background"
             android:inputType="textEmailAddress"
             android:textSize="20sp"
             android:text="phduongit2k1@gmail.com"/>
@@ -89,7 +89,7 @@
             android:layout_below="@+id/tv_update_phone"
             android:layout_marginTop="5dp"
             android:padding="13dp"
-            android:background="@drawable/edittext_background"
+            android:background="@drawable/edit_selector_background"
             android:textSize="20sp"
             android:text="0123456789"/>
 
@@ -129,7 +129,7 @@
             android:layout_below="@+id/tv_old_password"
             android:layout_marginTop="5dp"
             android:padding="13dp"
-            android:background="@drawable/edittext_background"
+            android:background="@drawable/edit_selector_background"
             android:inputType="textPassword"
             android:textSize="20sp"/>
 
@@ -150,7 +150,7 @@
             android:layout_below="@+id/tv_new_password"
             android:layout_marginTop="5dp"
             android:padding="13dp"
-            android:background="@drawable/edittext_background"
+            android:background="@drawable/edit_selector_background"
             android:inputType="textPassword"
             android:textSize="20sp"/>
 
@@ -171,7 +171,7 @@
             android:layout_below="@+id/tv_confirm_password"
             android:layout_marginTop="5dp"
             android:padding="13dp"
-            android:background="@drawable/edittext_background"
+            android:background="@drawable/edit_selector_background"
             android:inputType="textPassword"
             android:textSize="20sp"/>
 
