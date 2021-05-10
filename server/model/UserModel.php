@@ -8,14 +8,22 @@ class UserModel {
     }
 
     public function login($account, $password) {
-        $query = "SELECT password
+        $query = "SELECT *
                 FROM user 
                 WHERE (username = '$account' OR email = '$account' OR phone = '$account') AND password = '$password'";
         $result = $this->conn->query($query);
-        if ($result->num_rows > 0)
-            return true;
+        $data = null;
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            $data = array(
+                'success' => true,
+                'username' => $row['username'],
+                'role' => $row['role']
+            );
+        }
         else
-            return false;
+            $data = array('success' => false);
+        return $data;
     }
 
     public function signup($username, $email, $phone, $password) {

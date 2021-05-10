@@ -3,15 +3,15 @@ package com.example.travelholic;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.travelholic.jsonmodel.LoginModel;
-import com.google.gson.Gson;
-
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 
@@ -29,11 +29,21 @@ public class LoginActivity extends AppCompatActivity {
     private EditText txtAccount;
     private EditText txtPassword;
 
+    private SharedPreferences preferences;
+    private SharedPreferences.Editor editor;
+    private String username;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         map();
+
+        if (username == null) {
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
 
         btnLogin.setOnClickListener(v -> {
             OkHttpClient client = new OkHttpClient();
@@ -55,19 +65,30 @@ public class LoginActivity extends AppCompatActivity {
 
                 @Override
                 public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                    Gson gson = new Gson();
-                    LoginModel loginModel = gson.fromJson(response.body().string(), LoginModel.class);  // parse json into Java class
-                    if (loginModel.getIsLoggedIn()) {   // if account and password are valid
-                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                        startActivity(intent);
+                    try {
+                        JSONObject jsonObject = new JSONObject(response.body().string());
+                        if (jsonObject.getBoolean("success")) {
+                            preferences = getSharedPreferences("com.example.travelholic.SESSION", MODE_PRIVATE);
+                            editor = preferences.edit();
+                            editor.putString("com.example.travelholic.SESSION_USERNAME", jsonObject.getString("username"));
+                            editor.putString("com.example.travelholic.SESSION_ROLE", jsonObject.getString("role"));
+                            editor.apply();
+                            username = jsonObject.getString("username");
+
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            startActivity(intent);
+                        }
+                        else {
+                            LoginActivity.this.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(LoginActivity.this, "Account or password incorrect!", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
                     }
-                    else {
-                        LoginActivity.this.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(LoginActivity.this, "Account or password incorrect!", Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                    catch (JSONException e) {
+                        e.printStackTrace();
                     }
                 }
             });

@@ -15,11 +15,7 @@ class UserController extends BaseController {
             );
 
             $login_user = $this->user_model->login($data['account'], $data['password']);
-            if ($login_user)
-                $status = array("is_logged_in" => true);
-            else
-                $status = array("is_logged_in" => false);
-            echo json_encode($status);
+            echo json_encode($login_user);
         }
     }
 }
