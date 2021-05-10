@@ -39,7 +39,11 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         map();
 
-        if (username == null) {
+        preferences = getSharedPreferences("com.example.travelholic.SESSION", MODE_PRIVATE);
+        editor = preferences.edit();
+
+        username = preferences.getString("com.example.travelholic.SESSION_USERNAME", null);
+        if (username != null) {
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
             finish();
@@ -68,8 +72,6 @@ public class LoginActivity extends AppCompatActivity {
                     try {
                         JSONObject jsonObject = new JSONObject(response.body().string());
                         if (jsonObject.getBoolean("success")) {
-                            preferences = getSharedPreferences("com.example.travelholic.SESSION", MODE_PRIVATE);
-                            editor = preferences.edit();
                             editor.putString("com.example.travelholic.SESSION_USERNAME", jsonObject.getString("username"));
                             editor.putString("com.example.travelholic.SESSION_ROLE", jsonObject.getString("role"));
                             editor.apply();
