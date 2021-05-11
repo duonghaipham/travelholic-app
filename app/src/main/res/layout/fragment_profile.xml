@@ -22,8 +22,7 @@
         android:layout_below="@+id/iv_avatar"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="15dp"
-        android:textSize="27sp"
-        android:text="Phạm Hải Dương"/>
+        android:textSize="27sp"/>
 
     <TextView
         android:id="@+id/tv_username"
@@ -32,8 +31,7 @@
         android:layout_below="@+id/tv_fullname"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp"
-        android:textSize="20sp"
-        android:text="\@phduong2001"/>
+        android:textSize="20sp"/>
 
     <LinearLayout
         android:id="@+id/ll_email_section"
@@ -58,8 +56,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="8"
-            android:textSize="20sp"
-            android:text="phduongit2k1@gmail.com"/>
+            android:textSize="20sp"/>
 
     </LinearLayout>
 
@@ -86,8 +83,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="8"
-            android:textSize="20sp"
-            android:text="0123456789"/>
+            android:textSize="20sp"/>
 
     </LinearLayout>
 
@@ -118,5 +114,20 @@
             android:text="2"/>
 
     </LinearLayout>
+
+    <android.widget.Button
+        android:id="@+id/btn_logout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ll_trip_section"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:padding="13dp"
+        android:backgroundTint="@color/blue_lapis"
+        android:background="@drawable/button_background"
+        android:textSize="20sp"
+        android:textColor="@color/white"
+        android:text="@string/logout"/>
 
 </RelativeLayout>

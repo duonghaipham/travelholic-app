@@ -1,13 +1,16 @@
 package com.example.travelholic;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.travelholic.helper.Session;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
@@ -28,10 +31,12 @@ public class LoginActivity extends AppCompatActivity {
     private Button btnLogin;
     private EditText txtAccount;
     private EditText txtPassword;
+    private TextView tvForgotPassword;
+    private Button btnSignup;
 
-    private SharedPreferences preferences;
-    private SharedPreferences.Editor editor;
+    private Session session;
     private String username;
+    private static int REQUEST_CODE = 8080;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,14 +44,11 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         map();
 
-        preferences = getSharedPreferences("com.example.travelholic.SESSION", MODE_PRIVATE);
-        editor = preferences.edit();
-
-        username = preferences.getString("com.example.travelholic.SESSION_USERNAME", null);
+        session = new Session(LoginActivity.this);
+        username = session.getUsername();
         if (username != null) {
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
-            finish();
         }
 
         btnLogin.setOnClickListener(v -> {
@@ -64,29 +66,21 @@ public class LoginActivity extends AppCompatActivity {
 
             client.newCall(request).enqueue(new Callback() {
                 @Override
-                public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                }
+                public void onFailure(@NotNull Call call, @NotNull IOException e) { }
 
                 @Override
                 public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                     try {
                         JSONObject jsonObject = new JSONObject(response.body().string());
                         if (jsonObject.getBoolean("success")) {
-                            editor.putString("com.example.travelholic.SESSION_USERNAME", jsonObject.getString("username"));
-                            editor.putString("com.example.travelholic.SESSION_ROLE", jsonObject.getString("role"));
-                            editor.apply();
+                            session.setSession(jsonObject.getString("username"), jsonObject.getString("role"));
                             username = jsonObject.getString("username");
 
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(intent);
                         }
                         else {
-                            LoginActivity.this.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(LoginActivity.this, "Account or password incorrect!", Toast.LENGTH_SHORT).show();
-                                }
-                            });
+                            LoginActivity.this.runOnUiThread(() -> Toast.makeText(LoginActivity.this, "Account or password incorrect!", Toast.LENGTH_SHORT).show());
                         }
                     }
                     catch (JSONException e) {
@@ -95,11 +89,35 @@ public class LoginActivity extends AppCompatActivity {
                 }
             });
         });
+
+        tvForgotPassword.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, ForgetPasswordActivity.class);
+            startActivity(intent);
+        });
+
+        btnSignup.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
+            startActivityForResult(intent, REQUEST_CODE);
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                txtAccount.setText(data.getStringExtra("account"));
+                txtPassword.setText(data.getStringExtra("password"));
+                btnLogin.performClick();
+            }
+        }
     }
 
     private void map() {
         btnLogin = findViewById(R.id.btn_login);
         txtAccount = findViewById(R.id.txt_account);
         txtPassword = findViewById(R.id.txt_password);
+        tvForgotPassword = findViewById(R.id.tv_forgot_password);
+        btnSignup = findViewById(R.id.btn_signup);
     }
 }

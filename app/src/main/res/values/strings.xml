@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">travelholic-app</string>
     <string name="login">Login</string>
+    <string name="logout">Logout</string>
     <string name="account">Email/Phone</string>
     <string name="password">Password</string>
     <string name="confirm_password">Confirm password</string>
@@ -21,4 +22,7 @@
     <string name="tour_name">Tour name</string>
     <string name="create">Create</string>
     <string name="stop_points">Stop points</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="or">Or</string>
+    <string name="username">Username</string>
 </resources>
