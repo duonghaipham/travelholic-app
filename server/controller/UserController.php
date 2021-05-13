@@ -3,7 +3,7 @@ class UserController extends BaseController {
     private $user_model;
 
     public function __construct() {
-        $this->model("UserModel");
+        $this->model('UserModel');
         $this->user_model = new UserModel();
     }
 

@@ -54,28 +54,14 @@ CREATE TABLE participant(
 CREATE TABLE tour(
     id INT AUTO_INCREMENT,
     tour_name VARCHAR(200) CHARSET utf8,
+    type VARCHAR(200) CHARSET utf8,
+    departure VARCHAR(200) CHARSET utf8,
+    destination VARCHAR(200) CHARSET utf8,
     creator VARCHAR(100),
     status VARCHAR(50),
-    cost FLOAT,
+    during VARCHAR(30) CHARSET utf8,
     image VARCHAR(500),
     note VARCHAR(200) CHARSET utf8,
-    rate FLOAT,
-    created_at DATETIME,
-    updated_at DATETIME,
-    PRIMARY KEY (id)
-);
-
-CREATE TABLE stop_point(
-    id INT AUTO_INCREMENT,
-    tour_id INT,
-    stop_name VARCHAR(200) CHARSET utf8,
-    service_type VARCHAR(200) CHARSET utf8,
-    beginning DATETIME,
-    end DATETIME,
-    description VARCHAR(200) CHARSET utf8,
-    image VARCHAR(500),
-    status VARCHAR(50),
-    rate FLOAT,
     created_at DATETIME,
     updated_at DATETIME,
     PRIMARY KEY (id)
@@ -99,29 +85,16 @@ CREATE TABLE tour_comment(
     PRIMARY KEY (id)
 );
 
-CREATE TABLE stop_point_comment(
-    id INT AUTO_INCREMENT,
-    user VARCHAR(100),
-    stop_point_id INT,
-    image VARCHAR(500),
-    rate INT,
-    active BOOL,
-    created_at DATETIME,
-    deleted_at DATETIME,
-    PRIMARY KEY (id)
-);
-
 ALTER TABLE user
 ADD CONSTRAINT CHK_ROLE
 CHECK (role IN ('admin', 'general'));
 
+ALTER TABLE user
+ALTER role SET DEFAULT 'general';
+
 ALTER TABLE tour
 ADD CONSTRAINT CHK_TOUR_STATUS
-CHECK (status IN ('open', 'closed', 'in-progress', 'prepared', 'done', 'delayed'));
-
-ALTER TABLE stop_point
-ADD CONSTRAINT CHK_STOP_POINT_STATUS
-CHECK (status IN ('not visited', 'visited', 'skipped'));
+CHECK (status IN ('Open', 'Closed', 'In-progress', 'Prepared', 'Done', 'Delayed'));
 
 ALTER TABLE conversation
 ADD CONSTRAINT FK_USER_AS_CREATOR
@@ -171,10 +144,6 @@ ALTER TABLE member
 ADD CONSTRAINT FK_USER_AS_MEMBER
 FOREIGN KEY (user) REFERENCES user(username);
 
-ALTER TABLE stop_point
-ADD CONSTRAINT FK_STOP_POINT_IN_TOUR
-FOREIGN KEY (tour_id) REFERENCES tour(id);
-
 ALTER TABLE tour_comment
 ADD CONSTRAINT FK_USER_AS_TOUR_COMMENTER
 FOREIGN KEY (user) REFERENCES user(username);
@@ -182,14 +151,6 @@ FOREIGN KEY (user) REFERENCES user(username);
 ALTER TABLE tour_comment
 ADD CONSTRAINT FK_COMMENT_IN_TOUR
 FOREIGN KEY (tour_id) REFERENCES tour(id);
-
-ALTER TABLE stop_point_comment
-ADD CONSTRAINT FK_USER_AS_STOP_POINT_COMMENTER
-FOREIGN KEY (user) REFERENCES  user(username);
-
-ALTER TABLE stop_point_comment
-ADD CONSTRAINT FK_COMMENT_IN_STOP_POINT
-FOREIGN KEY (stop_point_id) REFERENCES stop_point(id);
 
 INSERT INTO user(username, email, password, fullname, role, created_at, updated_at)
 VALUES ('admin', 'admin@travelholic.com', 'admin', 'Administrator', 'admin', NOW(), NOW());

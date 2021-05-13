@@ -84,24 +84,19 @@ public class SignupActivity extends AppCompatActivity {
 
                             @Override
                             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                                SignupActivity.this.runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        try {
-                                            JSONObject jsonObject = new JSONObject(response.body().string());
-                                            if (jsonObject.getBoolean("success")) {
-                                                Intent intent = new Intent();
-                                                intent.putExtra("account", txtUsername.getText().toString());
-                                                intent.putExtra("password", txtPassword.getText().toString());
-                                                setResult(RESULT_OK, intent);
-                                                finish();
-                                            }
-                                            Toast.makeText(SignupActivity.this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        } catch (IOException e) {
-                                            e.printStackTrace();
+                                SignupActivity.this.runOnUiThread(() -> {
+                                    try {
+                                        JSONObject jsonObject = new JSONObject(response.body().string());
+                                        if (jsonObject.getBoolean("success")) {
+                                            Intent intent = new Intent();
+                                            intent.putExtra("account", txtUsername.getText().toString());
+                                            intent.putExtra("password", txtPassword.getText().toString());
+                                            setResult(RESULT_OK, intent);
+                                            finish();
                                         }
+                                        Toast.makeText(SignupActivity.this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+                                    } catch (JSONException | IOException e) {
+                                        e.printStackTrace();
                                     }
                                 });
                             }
