@@ -50,4 +50,28 @@ class UserController extends BaseController {
             echo json_encode($signup_user);
         }
     }
+
+    public function update() {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+
+            $data = array(
+                'avatar' => trim($_POST['avatar']),
+                'fullname' => trim($_POST['fullname']),
+                'username' => trim($_POST['username']),
+                'email' => trim($_POST['email']),
+                'phone' => trim($_POST['phone']),
+                'new_password' => trim($_POST['new_password'])
+            );
+            $update_user = $this->user_model->update(
+                $data['avatar'],
+                $data['fullname'],
+                $data['username'],
+                $data['email'],
+                $data['phone'],
+                $data['new_password']
+            );
+            echo json_encode($update_user);
+        }
+    }
 }

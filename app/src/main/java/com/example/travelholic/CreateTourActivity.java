@@ -8,8 +8,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Base64;
-import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -29,7 +27,6 @@ import java.io.IOException;
 
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -39,7 +36,6 @@ import okhttp3.Response;
 public class CreateTourActivity extends AppCompatActivity {
 
     private static final int SELECT_PHOTO = 1;
-    private Uri uri;
     private Bitmap bitmap;
     private Session session;
 
@@ -98,9 +94,9 @@ public class CreateTourActivity extends AppCompatActivity {
                 public void onFailure(@NotNull Call call, @NotNull IOException e) { }
 
                 @Override
-                public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                public void onResponse(@NotNull Call call, @NotNull Response response) {
                     CreateTourActivity.this.runOnUiThread(() -> {
-                        JSONObject jsonObject = null;
+                        JSONObject jsonObject;
                         try {
                             jsonObject = new JSONObject(response.body().string());
                             Toast.makeText(CreateTourActivity.this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
@@ -117,7 +113,7 @@ public class CreateTourActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == SELECT_PHOTO && resultCode == RESULT_OK) {
-            uri = data.getData();
+            Uri uri = data.getData();
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
                 ivTourImage.setImageBitmap(bitmap);

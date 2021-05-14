@@ -17,6 +17,7 @@ class UserModel {
             $data = array(
                 'success' => true,
                 'username' => $row['username'],
+                'pasword' => $row['password'],
                 'role' => $row['role']
             );
         }
@@ -83,5 +84,29 @@ class UserModel {
                 'message' => 'Username existed!'
             );
         return $data;
+    }
+
+    public function update($avatar, $fullname, $username, $email, $phone, $new_password) {
+        if ($avatar != '') {
+            $bitmap_data = base64_decode($avatar);
+            $img = imagecreatefromstring($bitmap_data);
+            $img_path = 'data/img/user/' . hash('md5', $bitmap_data) . '.png';
+            imagepng($img, $img_path);
+
+            $avatar_query = "UPDATE user SET avatar = '$img_path' WHERE username = '$username'";
+            $this->conn->query($avatar_query);
+        }
+
+        if ($new_password) {
+            $new_password_query = "UPDATE user SET password = '$new_password' WHERE username = '$username'";
+            $this->conn->query($new_password_query);
+        }
+
+        $remain_query = "UPDATE user " .
+                        "SET fullname = '$fullname', email = '$email', phone = '$phone' " .
+                        "WHERE username = '$username'";
+        $this->conn->query($remain_query);
+
+        return array('success' => true);
     }
 }

@@ -12,9 +12,10 @@ public class Session {
         editor = preferences.edit();
     }
 
-    public void setSession(String username, String role) {
+    public void setSession(String username, String password, String role) {
         editor.clear();
         editor.putString("com.example.travelholic.SESSION_USERNAME", username);
+        editor.putString("com.example.travelholic.SESSION_PASSWORD", password);
         editor.putString("com.example.travelholic.SESSION_ROLE", role);
         editor.apply();
     }
@@ -26,6 +27,10 @@ public class Session {
 
     public String getUsername() {
         return preferences.getString("com.example.travelholic.SESSION_USERNAME", null);
+    }
+
+    public String getPassword() {
+        return preferences.getString("com.example.travelholic.SESSION_PASSWORD", null);
     }
 
     public String getRole() {

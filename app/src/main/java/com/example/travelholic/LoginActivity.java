@@ -73,7 +73,10 @@ public class LoginActivity extends AppCompatActivity {
                     try {
                         JSONObject jsonObject = new JSONObject(response.body().string());
                         if (jsonObject.getBoolean("success")) {
-                            session.setSession(jsonObject.getString("username"), jsonObject.getString("role"));
+                            session.setSession(
+                                    jsonObject.getString("username"),
+                                    txtPassword.getText().toString(),
+                                    jsonObject.getString("role"));
                             username = jsonObject.getString("username");
 
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);

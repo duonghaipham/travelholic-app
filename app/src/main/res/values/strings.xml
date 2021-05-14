@@ -33,6 +33,7 @@
     <string name="departure">Depature</string>
     <string name="destination">Destination</string>
     <string name="members">Members</string>
+    <string name="update_profile">Update profile</string>
 
     <string-array name="tour_type">
         <item>The weekend break</item>
