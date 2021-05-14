@@ -32,4 +32,43 @@ class TourModel extends Database {
 
         return array('success' => true, 'message' => "Tour created successfully!");
     }
+
+    public function load_all() {
+        $select_query = "SELECT tour_name, type, status, during, image FROM tour";
+        $result = $this->conn->query($select_query);
+
+        $tours = array();
+        while ($row = $result->fetch_assoc()) {
+            $tour = array(
+                'tour_name' => $row['tour_name'],
+                'type' => $row['type'],
+                'status' => $row['status'],
+                'during' => $row['during'],
+                'image' => $row['image']
+            );
+            array_push($tours, $tour);
+        }
+        return $tours;
+    }
+
+    public function load_my_tours($username) {
+        $select_query = "SELECT tour_name, type, status, during, image " .
+                        "FROM tour, member " .
+                        "WHERE tour.id = member.tour_id AND " .
+                        "member.user = '$username'";
+        $result = $this->conn->query($select_query);
+
+        $tours = array();
+        while ($row = $result->fetch_assoc()) {
+            $tour = array(
+                'tour_name' => $row['tour_name'],
+                'type' => $row['type'],
+                'status' => $row['status'],
+                'during' => $row['during'],
+                'image' => $row['image']
+            );
+            array_push($tours, $tour);
+        }
+        return $tours;
+    }
 }

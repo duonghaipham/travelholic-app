@@ -40,4 +40,19 @@ class TourController extends BaseController {
             echo json_encode($create_tour);
         }
     }
+
+    public function load_all() {
+        if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+            $tours = $this->tour_model->load_all();
+            echo json_encode($tours);
+        }
+    }
+
+    public function load_my_tours() {
+        if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+            $username = $_GET['username'];
+            $tours = $this->tour_model->load_my_tours($username);
+            echo json_encode($tours);
+        }
+    }
 }

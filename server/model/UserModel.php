@@ -17,7 +17,7 @@ class UserModel {
             $data = array(
                 'success' => true,
                 'username' => $row['username'],
-                'pasword' => $row['password'],
+                'password' => $row['password'],
                 'role' => $row['role']
             );
         }
