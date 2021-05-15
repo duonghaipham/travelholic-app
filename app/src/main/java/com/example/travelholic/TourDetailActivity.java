@@ -1,17 +1,17 @@
 package com.example.travelholic;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.example.travelholic.helper.Comment;
-import com.example.travelholic.helper.CommentAdapter;
+import com.example.travelholic.helper.CommentRecyclerViewAdapter;
 import com.example.travelholic.helper.Session;
 import com.squareup.picasso.Picasso;
 
@@ -48,7 +48,7 @@ public class TourDetailActivity extends AppCompatActivity {
     private Button btnTourImage;
     private ImageView ivTourImage;
     private Button btnSubmit;
-    private ListView lvComment;
+    private RecyclerView rvComment;
     private EditText txtComment;
     private Button btnComment;
     
@@ -71,30 +71,34 @@ public class TourDetailActivity extends AppCompatActivity {
             public void onFailure(@NotNull Call call, @NotNull IOException e) { }
 
             @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) {
-                TourDetailActivity.this.runOnUiThread(() -> {
-                    JSONObject jsonObject;
-                    try {
-                        jsonObject = new JSONObject(response.body().string());
-                        Id = jsonObject.getString("id");
-                        txtTourName.setText(jsonObject.getString("tour_name"));
-                        txtTourDeparture.setText(jsonObject.getString("departure"));
-                        txtTourDestination.setText(jsonObject.getString("destination"));
-                        txtTourDuring.setText(jsonObject.getString("during"));
-                        txtTourNote.setText(jsonObject.getString("note"));
-                        String urlImage = "http://10.0.2.2/travelholic-app/server/" + jsonObject.getString("image");
-                        Picasso.get().load(urlImage).into(ivTourImage);
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                try {
+                    JSONObject jsonObject = new JSONObject(response.body().string());
+                    Id = jsonObject.getString("id");
+                    TourDetailActivity.this.runOnUiThread(() -> {
+                        try {
+                            txtTourName.setText(jsonObject.getString("tour_name"));
+                            txtTourDeparture.setText(jsonObject.getString("departure"));
+                            txtTourDestination.setText(jsonObject.getString("destination"));
+                            txtTourDuring.setText(jsonObject.getString("during"));
+                            txtTourNote.setText(jsonObject.getString("note"));
+                            String urlImage = "http://10.0.2.2/travelholic-app/server/" + jsonObject.getString("image");
+                            Picasso.get().load(urlImage).into(ivTourImage);
 
-                        if (session.getUsername().equals(jsonObject.getString("creator"))) {
-                            btnSubmit.setText("Update");
+                            if (session.getUsername().equals(jsonObject.getString("creator"))) {
+                                btnSubmit.setText("Update");
+                            }
+                            else {
+                                btnSubmit.setText("Apply");
+                            }
+                            refreshComments();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
-                        else {
-                            btnSubmit.setText("Apply");
-                        }
-                    } catch (JSONException | IOException jsonException) {
-                        jsonException.printStackTrace();
-                    }
-                });
+                    });
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -117,22 +121,14 @@ public class TourDetailActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                         TourDetailActivity.this.runOnUiThread(() -> {
-                            try {
-                                JSONObject jsonObject = new JSONObject(response.body().string());
-                                if (jsonObject.getBoolean("success")) {
-                                    txtComment.clearFocus();
-                                    txtComment.setText("");
-                                }
-                            } catch (JSONException | IOException e) {
-                                e.printStackTrace();
-                            }
+                            txtComment.setText("");
+                            txtComment.clearFocus();
+                            refreshComments();
                         });
                     }
                 });
             }
         });
-
-        refreshComments();
     }
     
     private void map() {
@@ -147,7 +143,7 @@ public class TourDetailActivity extends AppCompatActivity {
         btnTourImage = findViewById(R.id.btn_tour_image);
         ivTourImage = findViewById(R.id.iv_tour_image);
         btnSubmit = findViewById(R.id.btn_tour_submit);
-        lvComment = findViewById(R.id.lv_comment);
+        rvComment = findViewById(R.id.rv_comment);
         txtComment = findViewById(R.id.txt_comment);
         btnComment = findViewById(R.id.btn_comment);
     }
@@ -172,8 +168,9 @@ public class TourDetailActivity extends AppCompatActivity {
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
                             comments.add(new Comment(jsonObject.getString("avatar"), jsonObject.getString("fullname"), jsonObject.getString("content")));
                         }
-                        CommentAdapter adapter = new CommentAdapter(TourDetailActivity.this, comments);
-                        lvComment.setAdapter(adapter);
+                        CommentRecyclerViewAdapter adapter = new CommentRecyclerViewAdapter(TourDetailActivity.this, comments);
+                        rvComment.setLayoutManager(new LinearLayoutManager(TourDetailActivity.this));
+                        rvComment.setAdapter(adapter);
                     } catch (JSONException | IOException e) {
                         e.printStackTrace();
                     }

@@ -262,20 +262,19 @@
             android:textColor="@color/white"
             android:text="@string/create"/>
 
-        <ListView
-            android:id="@+id/lv_comment"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_comment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/btn_tour_submit"
-            android:layout_marginTop="20dp"
-            tools:ignore="NestedScrolling" />
+            android:layout_marginTop="20dp"/>
 
 
         <LinearLayout
             android:id="@+id/ll_comment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/lv_comment"
+            android:layout_below="@+id/rv_comment"
             android:orientation="horizontal"
             android:gravity="center_vertical">
 
@@ -283,13 +282,17 @@
                 android:id="@+id/txt_comment"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="8"/>
+                android:layout_weight="8"
+                android:hint="@string/comment_hint"/>
 
             <android.widget.Button
                 android:id="@+id/btn_comment"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"/>
+                android:layout_weight="2"
+                android:backgroundTint="@color/blue_lapis"
+                android:textColor="@color/white"
+                android:text="@string/send"/>
 
         </LinearLayout>
 

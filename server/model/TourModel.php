@@ -100,14 +100,15 @@ class TourModel extends Database {
         $insert_query = "INSERT INTO tour_comment (user, tour_id, content, created_at, deleted_at) " .
                         "VALUES ('$username', '$tour_id', '$content', NOW(), NOW())";
         $this->conn->query($insert_query);
-        return array("success" => true, "query" => $insert_query);
+        return array("success" => true);
     }
 
     public function load_comments($id) {
-        $select_query = "SELECT user.fullname, user.avatar, tour_comment.content " .
+        $select_query = "SELECT tour_comment.tour_id, user.fullname, user.avatar, tour_comment.content " .
                         "FROM tour_comment, user " .
                         "WHERE tour_comment.user = user.username AND " .
-                        "tour_comment.tour_id = $id";
+                        "tour_comment.tour_id = $id " .
+                        "ORDER BY tour_comment.tour_id";
         $result = $this->conn->query($select_query);
         $comments = array();
         while ($row = $result->fetch_assoc()) {
