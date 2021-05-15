@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 
 import com.example.travelholic.CreateTourActivity;
 import com.example.travelholic.R;
+import com.example.travelholic.TourDetailActivity;
 import com.example.travelholic.helper.RecyclerItemClickListener;
 import com.example.travelholic.helper.Session;
 import com.example.travelholic.helper.Tour;
@@ -56,8 +57,6 @@ public class ToursFragment extends Fragment {
         fabCreateTour = view.findViewById(R.id.fab_create_tour);
         tours = new Vector<>();
 
-        refreshData();
-
         fabCreateTour.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), CreateTourActivity.class);
             intent.putExtra("create", false);
@@ -65,8 +64,7 @@ public class ToursFragment extends Fragment {
         });
 
         rvTours.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), rvTours, (v, position) ->  {
-            Intent intent = new Intent(getActivity(), CreateTourActivity.class);
-            intent.putExtra("create", false);
+            Intent intent = new Intent(getActivity(), TourDetailActivity.class);
             intent.putExtra("position", position);
             startActivity(intent);
         }));
@@ -103,13 +101,12 @@ public class ToursFragment extends Fragment {
                         tour.setStatus(jsonObject.getString("status"));
                         tours.add(tour);
                     }
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            TourRecyclerViewAdapter adapter = new TourRecyclerViewAdapter(getActivity(), tours);
-                            rvTours.setLayoutManager(new LinearLayoutManager(getActivity()));
-                            rvTours.setAdapter(adapter);
-                        }
+
+                    TourRecyclerViewAdapter adapter = new TourRecyclerViewAdapter(getActivity(), tours);
+
+                    getActivity().runOnUiThread(() -> {
+                        rvTours.setLayoutManager(new LinearLayoutManager(getActivity()));
+                        rvTours.setAdapter(adapter);
                     });
                 } catch (JSONException e) {
                     e.printStackTrace();

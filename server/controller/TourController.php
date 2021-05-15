@@ -55,4 +55,34 @@ class TourController extends BaseController {
             echo json_encode($tours);
         }
     }
+
+    public function load_by_position() {
+        if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+            $position = $_GET['position'];
+            $tour = $this->tour_model->load_by_position($position);
+            echo json_encode($tour);
+        }
+    }
+
+    public function comment() {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+
+            $data = array(
+                'tour_id' => trim($_POST['tour_id']),
+                'username' => trim($_POST['username']),
+                'content' => trim($_POST['content'])
+            );
+            $comment = $this->tour_model->comment($data['tour_id'], $data['username'], $data['content']);
+            echo $comment;
+        }
+    }
+
+    public function load_comments() {
+        if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+            $id = intval($_GET['id']);
+            $comments = $this->tour_model->load_comments($id);
+            echo json_encode($comments);
+        }
+    }
 }

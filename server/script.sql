@@ -15,42 +15,6 @@ CREATE TABLE user(
      PRIMARY KEY (username)
 );
 
-CREATE TABLE conversation(
-     id INT AUTO_INCREMENT,
-     title VARCHAR(100) CHARSET utf8,
-     creator VARCHAR(100),
-     PRIMARY KEY (id)
-);
-
-CREATE TABLE deleted_conversation(
-     conversation_id INT,
-     user VARCHAR(100),
-     deleted_at DATETIME,
-     PRIMARY KEY (conversation_id, user)
-);
-
-CREATE TABLE message(
-    id INT AUTO_INCREMENT,
-    conversation_id INT,
-    sender VARCHAR(100),
-    content VARCHAR(1000) CHARSET utf8,
-    created_at DATETIME,
-    PRIMARY KEY (id)
-);
-
-CREATE TABLE deleted_message(
-    user VARCHAR(100),
-    message_id INT,
-    deleted_at DATETIME,
-    PRIMARY KEY (user, message_id)
-);
-
-CREATE TABLE participant(
-    conversation_id INT,
-    user VARCHAR(100),
-    PRIMARY KEY (conversation_id, user)
-);
-
 CREATE TABLE tour(
     id INT AUTO_INCREMENT,
     tour_name VARCHAR(200) CHARSET utf8,
@@ -85,6 +49,15 @@ CREATE TABLE tour_comment(
     PRIMARY KEY (id)
 );
 
+CREATE TABLE notification(
+    id INT AUTO_INCREMENT,
+    tour_id INT,
+    receiver VARCHAR(100),
+    type VARCHAR(20),
+    status VARCHAR(20),
+    PRIMARY KEY (id)
+);
+
 ALTER TABLE user
 ADD CONSTRAINT CHK_ROLE
 CHECK (role IN ('admin', 'general'));
@@ -96,41 +69,13 @@ ALTER TABLE tour
 ADD CONSTRAINT CHK_TOUR_STATUS
 CHECK (status IN ('Open', 'Closed', 'In-progress', 'Prepared', 'Done', 'Delayed'));
 
-ALTER TABLE conversation
-ADD CONSTRAINT FK_USER_AS_CREATOR
-FOREIGN KEY (creator) REFERENCES user(username);
+ALTER TABLE notification
+ADD CONSTRAINT CK_NOTIFICATION_TYPE
+CHECK (status IN ('invite', 'apply', 'comment', 'rate'));
 
-ALTER TABLE participant
-ADD CONSTRAINT FK_USER_AS_PARTICIPANT
-FOREIGN KEY (user) REFERENCES user(username);
-
-ALTER TABLE participant
-ADD CONSTRAINT FK_PARTICIPANT_IN_CONSERVATION
-FOREIGN KEY (conversation_id) REFERENCES conversation(id);
-
-ALTER TABLE message
-ADD CONSTRAINT FK_USER_AS_SENDER
-FOREIGN KEY (sender) REFERENCES user(username);
-
-ALTER TABLE message
-ADD CONSTRAINT FK_MESSAGE_IN_CONVERSATION
-FOREIGN KEY (conversation_id) REFERENCES conversation(id);
-
-ALTER TABLE deleted_conversation
-ADD CONSTRAINT FK_USER_DELETED_CONVERSATION
-FOREIGN KEY (user) REFERENCES user(username);
-
-ALTER TABLE deleted_conversation
-ADD CONSTRAINT FK_LINK_CONVERSATION
-FOREIGN KEY (conversation_id) REFERENCES conversation(id);
-
-ALTER TABLE deleted_message
-ADD CONSTRAINT FK_USER_DELETED_MESSAGE
-FOREIGN KEY (user) REFERENCES user(username);
-
-ALTER TABLE deleted_message
-ADD CONSTRAINT FK_LINK_MESSAGE
-FOREIGN KEY (message_id) REFERENCES message(id);
+ALTER TABLE notification
+ADD CONSTRAINT CHK_NOTIFICATION_STATUS
+CHECK (status IN ('Pending', 'Accept', 'Decline'));
 
 ALTER TABLE tour
 ADD CONSTRAINT FK_USER_AS_TOUR_CREATOR
@@ -150,6 +95,14 @@ FOREIGN KEY (user) REFERENCES user(username);
 
 ALTER TABLE tour_comment
 ADD CONSTRAINT FK_COMMENT_IN_TOUR
+FOREIGN KEY (tour_id) REFERENCES tour(id);
+
+ALTER TABLE notification
+ADD CONSTRAINT FK_USER_AS_RECEIVER
+FOREIGN KEY (receiver) REFERENCES user(username);
+
+ALTER TABLE notification
+ADD CONSTRAINT FK_NOTIFICATION_TOUR
 FOREIGN KEY (tour_id) REFERENCES tour(id);
 
 INSERT INTO user(username, email, password, fullname, role, created_at, updated_at)

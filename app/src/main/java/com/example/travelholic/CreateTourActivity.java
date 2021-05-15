@@ -57,88 +57,83 @@ public class CreateTourActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_tour);
         init();
 
-        boolean createMode = getIntent().getBooleanExtra("create", true);
-        int position = getIntent().getIntExtra("position", -1);
+        btnTourImage.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_PICK);
+            intent.setType("image/*");
+            startActivityForResult(intent, SELECT_PHOTO);
+        });
 
-        if (createMode) {
-            btnTourImage.setOnClickListener(v -> {
-                Intent intent = new Intent(Intent.ACTION_PICK);
-                intent.setType("image/*");
-                startActivityForResult(intent, SELECT_PHOTO);
-            });
+        btnCreate.setOnClickListener(v -> {
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 0, stream);
+            byte[] bitmapData = stream.toByteArray();
+            String base64Data = Base64Utils.encode(bitmapData);
 
-            btnCreate.setOnClickListener(v -> {
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.PNG, 0, stream);
-                byte[] bitmapData = stream.toByteArray();
-                String base64Data = Base64Utils.encode(bitmapData);
-
-                OkHttpClient client = new OkHttpClient();
-                RequestBody body = new MultipartBody.Builder()
-                        .setType(MultipartBody.FORM)
-                        .addFormDataPart("creator", session.getUsername())
-                        .addFormDataPart("tour_name", txtTourName.getText().toString())
-                        .addFormDataPart("type", spnTourType.getSelectedItem().toString())
-                        .addFormDataPart("status", spnTourStatus.getSelectedItem().toString())
-                        .addFormDataPart("departure", txtTourDeparture.getText().toString())
-                        .addFormDataPart("destination", txtTourDestination.getText().toString())
-                        .addFormDataPart("during", txtTourDuring.getText().toString())
-                        .addFormDataPart("members", txtTourMembers.getText().toString())
-                        .addFormDataPart("note", txtTourNote.getText().toString())
-                        .addFormDataPart("image", base64Data)
-                        .build();
-                String url = "http://10.0.2.2/travelholic-app/server/index.php?controller=Tour&action=create";
-                Request request = new Request.Builder()
-                        .url(url)
-                        .post(body)
-                        .build();
-
-                client.newCall(request).enqueue(new Callback() {
-                    @Override
-                    public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                    }
-
-                    @Override
-                    public void onResponse(@NotNull Call call, @NotNull Response response) {
-                        CreateTourActivity.this.runOnUiThread(() -> {
-                            JSONObject jsonObject;
-                            try {
-                                jsonObject = new JSONObject(response.body().string());
-                                if (jsonObject.getBoolean("success"))
-                                    finish();
-                                Toast.makeText(CreateTourActivity.this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
-                            } catch (JSONException | IOException e) {
-                                e.printStackTrace();
-                            }
-                        });
-                    }
-                });
-            });
-        }
-        else {
             OkHttpClient client = new OkHttpClient();
-            String url = "http://10.0.2.2/travelholic-app/server/index.php?controller=Tour&action=detail&position=" + String.valueOf(position);
+            RequestBody body = new MultipartBody.Builder()
+                    .setType(MultipartBody.FORM)
+                    .addFormDataPart("creator", session.getUsername())
+                    .addFormDataPart("tour_name", txtTourName.getText().toString())
+                    .addFormDataPart("type", spnTourType.getSelectedItem().toString())
+                    .addFormDataPart("status", spnTourStatus.getSelectedItem().toString())
+                    .addFormDataPart("departure", txtTourDeparture.getText().toString())
+                    .addFormDataPart("destination", txtTourDestination.getText().toString())
+                    .addFormDataPart("during", txtTourDuring.getText().toString())
+                    .addFormDataPart("members", txtTourMembers.getText().toString())
+                    .addFormDataPart("note", txtTourNote.getText().toString())
+                    .addFormDataPart("image", base64Data)
+                    .build();
+            String url = "http://10.0.2.2/travelholic-app/server/index.php?controller=Tour&action=create";
             Request request = new Request.Builder()
                     .url(url)
+                    .post(body)
                     .build();
+
             client.newCall(request).enqueue(new Callback() {
                 @Override
-                public void onFailure(@NotNull Call call, @NotNull IOException e) { }
+                public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                }
 
                 @Override
-                public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-
+                public void onResponse(@NotNull Call call, @NotNull Response response) {
+                    CreateTourActivity.this.runOnUiThread(() -> {
+                        JSONObject jsonObject;
+                        try {
+                            jsonObject = new JSONObject(response.body().string());
+                            if (jsonObject.getBoolean("success"))
+                                finish();
+                            Toast.makeText(CreateTourActivity.this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+                        } catch (JSONException | IOException e) {
+                            e.printStackTrace();
+                        }
+                    });
                 }
             });
-            txtTourName.setEnabled(false);
-            spnTourType.setEnabled(false);
-            spnTourStatus.setEnabled(false);
-            txtTourDeparture.setEnabled(false);
-            txtTourDestination.setEnabled(false);
-            txtTourDuring.setEnabled(false);
-            txtTourMembers.setEnabled(false);
-            txtTourNote.setEnabled(false);
-        }
+        });
+
+//
+//            OkHttpClient client = new OkHttpClient();
+//            String url = "http://10.0.2.2/travelholic-app/server/index.php?controller=Tour&action=detail&position=" + String.valueOf(position);
+//            Request request = new Request.Builder()
+//                    .url(url)
+//                    .build();
+//            client.newCall(request).enqueue(new Callback() {
+//                @Override
+//                public void onFailure(@NotNull Call call, @NotNull IOException e) { }
+//
+//                @Override
+//                public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+//
+//                }
+//            });
+//            txtTourName.setEnabled(false);
+//            spnTourType.setEnabled(false);
+//            spnTourStatus.setEnabled(false);
+//            txtTourDeparture.setEnabled(false);
+//            txtTourDestination.setEnabled(false);
+//            txtTourDuring.setEnabled(false);
+//            txtTourMembers.setEnabled(false);
+//            txtTourNote.setEnabled(false);
     }
 
     @Override

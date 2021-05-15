@@ -15,13 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Travelholicapp"
         android:usesCleartextTraffic="true">
-        <activity android:name=".UpdateProfileActivity"></activity>
+        <activity android:name=".TourDetailActivity"></activity>
+        <activity android:name=".UpdateProfileActivity" />
         <activity android:name=".CreateTourActivity" />
-
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key" />
-
         <activity android:name=".MainActivity" />
         <activity android:name=".ForgetPasswordActivity" />
         <activity android:name=".SignupActivity" />

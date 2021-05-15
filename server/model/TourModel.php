@@ -71,4 +71,53 @@ class TourModel extends Database {
         }
         return $tours;
     }
+
+    public function load_by_position($position) {
+        $select_query = "SELECT * FROM tour ORDER BY id LIMIT $position,1";
+        $result = $this->conn->query($select_query);
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            $tour = array(
+                'success' => true,
+                'id' => $row['id'],
+                'tour_name' => $row['tour_name'],
+                'type' => $row['type'],
+                'departure' => $row['departure'],
+                'destination' => $row['destination'],
+                'creator' => $row['creator'],
+                'status' => $row['status'],
+                'during' => $row['during'],
+                'image' => $row['image'],
+                'note' => $row['note'],
+            );
+            return $tour;
+        }
+        else
+            return array("success" => false);
+    }
+
+    public function comment($tour_id, $username, $content) {
+        $insert_query = "INSERT INTO tour_comment (user, tour_id, content, created_at, deleted_at) " .
+                        "VALUES ('$username', '$tour_id', '$content', NOW(), NOW())";
+        $this->conn->query($insert_query);
+        return array("success" => true, "query" => $insert_query);
+    }
+
+    public function load_comments($id) {
+        $select_query = "SELECT user.fullname, user.avatar, tour_comment.content " .
+                        "FROM tour_comment, user " .
+                        "WHERE tour_comment.user = user.username AND " .
+                        "tour_comment.tour_id = $id";
+        $result = $this->conn->query($select_query);
+        $comments = array();
+        while ($row = $result->fetch_assoc()) {
+            $comment = array(
+                'fullname' => $row['fullname'],
+                'avatar' => $row['avatar'],
+                'content' => $row['content']
+            );
+            array_push($comments, $comment);
+        }
+        return $comments;
+    }
 }

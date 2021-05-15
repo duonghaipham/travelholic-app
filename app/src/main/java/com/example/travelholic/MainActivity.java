@@ -10,7 +10,7 @@ import androidx.viewpager.widget.ViewPager;
 import android.os.Bundle;
 
 import com.example.travelholic.fragment.HistoryFragment;
-import com.example.travelholic.fragment.MapsFragment;
+import com.example.travelholic.fragment.NotificationFragment;
 import com.example.travelholic.fragment.ProfileFragment;
 import com.example.travelholic.fragment.ToursFragment;
 import com.google.android.material.tabs.TabLayout;
@@ -32,13 +32,13 @@ public class MainActivity extends AppCompatActivity {
         tlMain = findViewById(R.id.tl_main);
 
         tlMain.addTab(tlMain.newTab().setIcon(R.drawable.ic_list));
-        tlMain.addTab(tlMain.newTab().setIcon(R.drawable.ic_messenger));
+        tlMain.addTab(tlMain.newTab().setIcon(R.drawable.ic_notification));
         tlMain.addTab(tlMain.newTab().setIcon(R.drawable.ic_history_clock));
         tlMain.addTab(tlMain.newTab().setIcon(R.drawable.ic_user));
 
         PageAdapter adapter = new PageAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         adapter.addFragment(new ToursFragment());
-        adapter.addFragment(new MapsFragment());
+        adapter.addFragment(new NotificationFragment());
         adapter.addFragment(new HistoryFragment());
         adapter.addFragment(new ProfileFragment());
 

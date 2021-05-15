@@ -76,7 +76,7 @@
                 android:id="@+id/iv_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_multi_users"/>
+                android:src="@drawable/ic_target"/>
 
             <TextView
                 android:id="@+id/tv_status"
@@ -98,7 +98,7 @@
                 android:id="@+id/iv_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_price_tag"/>
+                android:src="@drawable/ic_travelling"/>
 
             <TextView
                 android:id="@+id/tv_type"
