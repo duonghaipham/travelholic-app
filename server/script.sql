@@ -15,6 +15,13 @@ CREATE TABLE user(
      PRIMARY KEY (username)
 );
 
+CREATE TABLE password_reset(
+    id INT AUTO_INCREMENT,
+    email VARCHAR(100),
+    token CHAR(6),
+    PRIMARY KEY (id)
+);
+
 CREATE TABLE tour(
     id INT AUTO_INCREMENT,
     tour_name VARCHAR(200) CHARSET utf8,
@@ -41,7 +48,7 @@ CREATE TABLE tour_comment(
     id INT AUTO_INCREMENT,
     user VARCHAR(100),
     tour_id INT,
-    content VARCHAR(500),
+    content VARCHAR(500) CHARSET utf8,
     rate INT,
     active BOOL,
     created_at DATETIME,
@@ -65,6 +72,14 @@ CHECK (role IN ('admin', 'general'));
 
 ALTER TABLE user
 ALTER role SET DEFAULT 'general';
+
+ALTER TABLE user
+ADD CONSTRAINT UNI_EMAIL
+UNIQUE (email);
+
+ALTER TABLE password_reset
+ADD CONSTRAINT FK_EMAIL_UNI
+FOREIGN KEY (email) REFERENCES user(email);
 
 ALTER TABLE tour
 ADD CONSTRAINT CHK_TOUR_STATUS

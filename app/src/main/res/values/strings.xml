@@ -37,6 +37,7 @@
     <string name="send">Send</string>
     <string name="comment_hint">Your comment goes here...</string>
     <string name="accept">Accept</string>
+    <string name="verification">Verification code</string>
 
     <string-array name="tour_type">
         <item>The weekend break</item>

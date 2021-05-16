@@ -14,7 +14,7 @@
         android:layout_height="200dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp"
-        android:background="@color/blue_lapis"/>
+        android:background="@drawable/ic_user"/>
 
     <TextView
         android:id="@+id/tv_fullname"

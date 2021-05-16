@@ -48,7 +48,6 @@ public class TourDetailActivity extends AppCompatActivity {
     private EditText txtTourDeparture;
     private EditText txtTourDestination;
     private EditText txtTourDuring;
-    private EditText txtTourMembers;
     private EditText txtTourNote;
     private Button btnTourImage;
     private ImageView ivTourImage;
@@ -101,7 +100,6 @@ public class TourDetailActivity extends AppCompatActivity {
         txtTourDeparture = findViewById(R.id.txt_tour_departure);
         txtTourDestination = findViewById(R.id.txt_tour_destination);
         txtTourDuring = findViewById(R.id.txt_tour_during);
-        txtTourMembers = findViewById(R.id.txt_tour_members);
         txtTourNote = findViewById(R.id.txt_tour_note);
         btnTourImage = findViewById(R.id.btn_tour_image);
         ivTourImage = findViewById(R.id.iv_tour_image);
@@ -157,7 +155,6 @@ public class TourDetailActivity extends AppCompatActivity {
                             txtTourDeparture.setEnabled(false);
                             txtTourDestination.setEnabled(false);
                             txtTourDuring.setEnabled(false);
-                            txtTourMembers.setEnabled(false);
                             txtTourNote.setEnabled(false);
                             btnSubmit.setText("Apply");
                         }
