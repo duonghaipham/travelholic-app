@@ -4,11 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="10dp"
-    android:background="@color/white"
     android:gravity="center">
 
     <ImageView
-        android:id="@+id/iv_comment_avatar"
+        android:id="@+id/iv_notif_avatar"
         android:layout_width="65dp"
         android:layout_height="65dp"
         android:background="@color/blue_lapis"/>
@@ -20,19 +19,19 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/tv_comment_fullname"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"/>
-
-        <TextView
-            android:id="@+id/tv_comment_content"
+            android:id="@+id/tv_notif_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:textSize="20sp"/>
 
-    </LinearLayout>
+        <Button
+            android:id="@+id/btn_accept"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:text="@string/accept"/>
 
+    </LinearLayout>
 
 </LinearLayout>

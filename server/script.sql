@@ -41,7 +41,7 @@ CREATE TABLE tour_comment(
     id INT AUTO_INCREMENT,
     user VARCHAR(100),
     tour_id INT,
-    image VARCHAR(500),
+    content VARCHAR(500),
     rate INT,
     active BOOL,
     created_at DATETIME,
@@ -52,6 +52,7 @@ CREATE TABLE tour_comment(
 CREATE TABLE notification(
     id INT AUTO_INCREMENT,
     tour_id INT,
+    sender VARCHAR(100),
     receiver VARCHAR(100),
     type VARCHAR(20),
     status VARCHAR(20),
@@ -96,6 +97,10 @@ FOREIGN KEY (user) REFERENCES user(username);
 ALTER TABLE tour_comment
 ADD CONSTRAINT FK_COMMENT_IN_TOUR
 FOREIGN KEY (tour_id) REFERENCES tour(id);
+
+ALTER TABLE notification
+ADD CONSTRAINT FK_USER_AS_SENDER
+FOREIGN KEY (sender) REFERENCES user(username);
 
 ALTER TABLE notification
 ADD CONSTRAINT FK_USER_AS_RECEIVER

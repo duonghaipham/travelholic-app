@@ -110,30 +110,6 @@ public class CreateTourActivity extends AppCompatActivity {
                 }
             });
         });
-
-//
-//            OkHttpClient client = new OkHttpClient();
-//            String url = "http://10.0.2.2/travelholic-app/server/index.php?controller=Tour&action=detail&position=" + String.valueOf(position);
-//            Request request = new Request.Builder()
-//                    .url(url)
-//                    .build();
-//            client.newCall(request).enqueue(new Callback() {
-//                @Override
-//                public void onFailure(@NotNull Call call, @NotNull IOException e) { }
-//
-//                @Override
-//                public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-//
-//                }
-//            });
-//            txtTourName.setEnabled(false);
-//            spnTourType.setEnabled(false);
-//            spnTourStatus.setEnabled(false);
-//            txtTourDeparture.setEnabled(false);
-//            txtTourDestination.setEnabled(false);
-//            txtTourDuring.setEnabled(false);
-//            txtTourMembers.setEnabled(false);
-//            txtTourNote.setEnabled(false);
     }
 
     @Override

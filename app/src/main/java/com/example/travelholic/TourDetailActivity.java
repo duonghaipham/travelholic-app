@@ -5,6 +5,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.widget.Adapter;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -34,8 +36,11 @@ import okhttp3.Response;
 
 public class TourDetailActivity extends AppCompatActivity {
 
+    private OkHttpClient client;
     private Session session;
     private String Id;
+    private ArrayAdapter<CharSequence> typeAdapter;
+    private ArrayAdapter<CharSequence> statusAdapter;
 
     private EditText txtTourName;
     private Spinner spnTourType;
@@ -56,53 +61,11 @@ public class TourDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tour_detail);
-        map();
-
-        session = new Session(TourDetailActivity.this);
-        int position = getIntent().getIntExtra("position", -1);
-        OkHttpClient client = new OkHttpClient();
-        String url = "http://10.0.2.2/travelholic-app/server/index.php?controller=Tour&action=load_by_position&position="
-                + String.valueOf(position);
-        Request request = new Request.Builder()
-                .url(url)
-                .build();
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e) { }
-
-            @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                try {
-                    JSONObject jsonObject = new JSONObject(response.body().string());
-                    Id = jsonObject.getString("id");
-                    TourDetailActivity.this.runOnUiThread(() -> {
-                        try {
-                            txtTourName.setText(jsonObject.getString("tour_name"));
-                            txtTourDeparture.setText(jsonObject.getString("departure"));
-                            txtTourDestination.setText(jsonObject.getString("destination"));
-                            txtTourDuring.setText(jsonObject.getString("during"));
-                            txtTourNote.setText(jsonObject.getString("note"));
-                            String urlImage = "http://10.0.2.2/travelholic-app/server/" + jsonObject.getString("image");
-                            Picasso.get().load(urlImage).into(ivTourImage);
-
-                            if (session.getUsername().equals(jsonObject.getString("creator"))) {
-                                btnSubmit.setText("Update");
-                            }
-                            else {
-                                btnSubmit.setText("Apply");
-                            }
-                            refreshComments();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    });
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+        init();
+        constructData();
 
         btnComment.setOnClickListener(v -> {
+            client = new OkHttpClient();
             if (!txtComment.getText().toString().isEmpty()) {
                 RequestBody body = new FormBody.Builder()
                         .add("tour_id", Id)
@@ -131,7 +94,7 @@ public class TourDetailActivity extends AppCompatActivity {
         });
     }
     
-    private void map() {
+    private void init() {
         txtTourName = findViewById(R.id.txt_tour_name);
         spnTourType = findViewById(R.id.spn_tour_type);
         spnTourStatus = findViewById(R.id.spn_tour_status);
@@ -146,10 +109,92 @@ public class TourDetailActivity extends AppCompatActivity {
         rvComment = findViewById(R.id.rv_comment);
         txtComment = findViewById(R.id.txt_comment);
         btnComment = findViewById(R.id.btn_comment);
+
+        typeAdapter = ArrayAdapter.createFromResource(TourDetailActivity.this, R.array.tour_type, R.layout.support_simple_spinner_dropdown_item);
+        spnTourType.setAdapter(typeAdapter);
+        statusAdapter = ArrayAdapter.createFromResource(TourDetailActivity.this, R.array.tour_status, R.layout.support_simple_spinner_dropdown_item);
+        spnTourStatus.setAdapter(statusAdapter);
+        client = new OkHttpClient();
     }
 
-    private void refreshComments() {
+    private void constructData() {
+        session = new Session(TourDetailActivity.this);
+        int position = getIntent().getIntExtra("position", -1);
         OkHttpClient client = new OkHttpClient();
+        String url = "http://10.0.2.2/travelholic-app/server/index.php?controller=Tour&action=load_by_position&position="
+                + String.valueOf(position);
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) { }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                TourDetailActivity.this.runOnUiThread(() -> {
+                    try {
+                        JSONObject jsonObject = new JSONObject(response.body().string());
+                        Id = jsonObject.getString("id");
+                        txtTourName.setText(jsonObject.getString("tour_name"));
+                        spnTourType.setSelection(typeAdapter.getPosition(jsonObject.getString("type")));
+                        spnTourStatus.setSelection(statusAdapter.getPosition(jsonObject.getString("status")));
+                        txtTourDeparture.setText(jsonObject.getString("departure"));
+                        txtTourDestination.setText(jsonObject.getString("destination"));
+                        txtTourDuring.setText(jsonObject.getString("during"));
+                        txtTourNote.setText(jsonObject.getString("note"));
+                        String urlImage = "http://10.0.2.2/travelholic-app/server/" + jsonObject.getString("image");
+                        Picasso.get().load(urlImage).into(ivTourImage);
+
+                        String creator = jsonObject.getString("creator");
+                        if (session.getUsername().equals(jsonObject.getString("creator"))) {
+                            btnSubmit.setText("Update");
+                        }
+                        else {
+                            txtTourName.setEnabled(false);
+                            spnTourType.setEnabled(false);
+                            spnTourStatus.setEnabled(false);
+                            txtTourDeparture.setEnabled(false);
+                            txtTourDestination.setEnabled(false);
+                            txtTourDuring.setEnabled(false);
+                            txtTourMembers.setEnabled(false);
+                            txtTourNote.setEnabled(false);
+                            btnSubmit.setText("Apply");
+                        }
+                        submit(creator);
+                        refreshComments();
+                    } catch (JSONException | IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+            }
+        });
+    }
+
+    private void submit(String creator) {
+        btnSubmit.setOnClickListener(v -> {
+            if (btnSubmit.getText().toString().equals("Apply")) {
+                String url = "http://10.0.2.2/travelholic-app/server/index.php?controller=Notification&action=apply&tour_id="
+                        + Id + "&sender=" + session.getUsername() + "&receiver=" + creator;
+                Request request = new Request.Builder()
+                        .url(url)
+                        .build();
+                client.newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(@NotNull Call call, @NotNull IOException e) { }
+
+                    @Override
+                    public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException { }
+                });
+            }
+            else {
+
+            }
+        });
+    }
+
+
+    private void refreshComments() {
         String url = "http://10.0.2.2/travelholic-app/server/index.php?controller=Tour&action=load_comments&id=" + Id;
         Request request = new Request.Builder()
                 .url(url)
