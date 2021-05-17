@@ -41,7 +41,6 @@
 
         </RelativeLayout>
 
-
         <RelativeLayout
             android:id="@+id/rl_during"
             android:layout_width="match_parent"

@@ -4,14 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white_nearly"
     tools:context=".fragment.ToursFragment">
+
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/sv_tour"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:queryHint="@string/search_hint"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_tours"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
+        android:layout_below="@+id/sv_tour"
+        android:layout_marginStart="20dp"
         android:layout_marginEnd="30dp"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

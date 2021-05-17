@@ -42,7 +42,7 @@ public class ForgetPasswordActivity extends AppCompatActivity {
                     RequestBody body = new FormBody.Builder()
                             .add("emmail", txtInput.getText().toString())
                             .build();
-                    String url = "http://10.0.2.2/travelholic-app/server/index.php?controller=User&action=reset";
+                    String url = "http://10.0.2.2/travelholic-app/server/index.php?controller=user&action=reset";
                     Request request = new Request.Builder()
                             .url(url)
                             .build();

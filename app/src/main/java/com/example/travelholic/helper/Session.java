@@ -33,6 +33,13 @@ public class Session {
         return preferences.getString("com.example.travelholic.SESSION_PASSWORD", null);
     }
 
+    public void setPassword(String password) {
+        editor.remove("com.example.travelholic.SESSION_PASSWORD");
+        editor.apply();
+        editor.putString("com.example.travelholic.SESSION_PASSWORD", password);
+        editor.apply();
+    }
+
     public String getRole() {
         return preferences.getString("com.example.travelholic.SESSION_ROLE", null);
     }

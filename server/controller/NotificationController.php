@@ -1,10 +1,13 @@
 <?php
 class NotificationController extends BaseController {
-    private $notification_model;
+    private NotificationModel $notification_model;
 
-    public function apply() {
+    public function __construct() {
         $this->model('NotificationModel');
         $this->notification_model = new NotificationModel();
+    }
+
+    public function apply() {
         if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             $tour_id = intval($_GET['tour_id']);
             $sender = $_GET['sender'];
@@ -15,8 +18,6 @@ class NotificationController extends BaseController {
     }
 
     public function load_all() {
-        $this->model('NotificationModel');
-        $this->notification_model = new NotificationModel();
         if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             $username = $_GET['username'];
             $notifications = $this->notification_model->load_all($username);

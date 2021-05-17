@@ -7,8 +7,10 @@ import android.view.View;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.jetbrains.annotations.NotNull;
+
 public class RecyclerItemClickListener implements RecyclerView.OnItemTouchListener {
-    private OnItemClickListener mListener;
+    private final OnItemClickListener mListener;
 
     public interface OnItemClickListener {
         void onItemClick(View view, int position);
@@ -35,8 +37,8 @@ public class RecyclerItemClickListener implements RecyclerView.OnItemTouchListen
     }
 
     @Override
-    public void onTouchEvent(RecyclerView view, MotionEvent motionEvent) {}
+    public void onTouchEvent(@NotNull RecyclerView view, @NotNull MotionEvent motionEvent) { }
 
     @Override
-    public void onRequestDisallowInterceptTouchEvent (boolean disallowIntercept) {}
+    public void onRequestDisallowInterceptTouchEvent (boolean disallowIntercept) { }
 }

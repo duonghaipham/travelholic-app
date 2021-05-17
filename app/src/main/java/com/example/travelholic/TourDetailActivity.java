@@ -5,10 +5,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
-import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
@@ -54,7 +54,7 @@ public class TourDetailActivity extends AppCompatActivity {
     private Button btnSubmit;
     private RecyclerView rvComment;
     private EditText txtComment;
-    private Button btnComment;
+    private ImageButton ibComment;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +63,7 @@ public class TourDetailActivity extends AppCompatActivity {
         init();
         constructData();
 
-        btnComment.setOnClickListener(v -> {
+        ibComment.setOnClickListener(v -> {
             client = new OkHttpClient();
             if (!txtComment.getText().toString().isEmpty()) {
                 RequestBody body = new FormBody.Builder()
@@ -71,7 +71,7 @@ public class TourDetailActivity extends AppCompatActivity {
                         .add("username", session.getUsername())
                         .add("content", txtComment.getText().toString())
                         .build();
-                String commentUrl = "http://10.0.2.2/travelholic-app/server/index.php?controller=Tour&action=comment";
+                String commentUrl = "http://10.0.2.2/travelholic-app/server/index.php?controller=comment&action=create";
                 Request commentRequest = new Request.Builder()
                         .post(body)
                         .url(commentUrl)
@@ -81,7 +81,7 @@ public class TourDetailActivity extends AppCompatActivity {
                     public void onFailure(@NotNull Call call, @NotNull IOException e) { }
 
                     @Override
-                    public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                    public void onResponse(@NotNull Call call, @NotNull Response response) {
                         TourDetailActivity.this.runOnUiThread(() -> {
                             txtComment.setText("");
                             txtComment.clearFocus();
@@ -106,7 +106,7 @@ public class TourDetailActivity extends AppCompatActivity {
         btnSubmit = findViewById(R.id.btn_tour_submit);
         rvComment = findViewById(R.id.rv_comment);
         txtComment = findViewById(R.id.txt_comment);
-        btnComment = findViewById(R.id.btn_comment);
+        ibComment = findViewById(R.id.ib_comment);
 
         typeAdapter = ArrayAdapter.createFromResource(TourDetailActivity.this, R.array.tour_type, R.layout.support_simple_spinner_dropdown_item);
         spnTourType.setAdapter(typeAdapter);
@@ -119,7 +119,7 @@ public class TourDetailActivity extends AppCompatActivity {
         session = new Session(TourDetailActivity.this);
         int position = getIntent().getIntExtra("position", -1);
         OkHttpClient client = new OkHttpClient();
-        String url = "http://10.0.2.2/travelholic-app/server/index.php?controller=Tour&action=load_by_position&position="
+        String url = "http://10.0.2.2/travelholic-app/server/index.php?controller=tour&action=get_detail&position="
                 + String.valueOf(position);
         Request request = new Request.Builder()
                 .url(url)
@@ -171,7 +171,7 @@ public class TourDetailActivity extends AppCompatActivity {
     private void submit(String creator) {
         btnSubmit.setOnClickListener(v -> {
             if (btnSubmit.getText().toString().equals("Apply")) {
-                String url = "http://10.0.2.2/travelholic-app/server/index.php?controller=Notification&action=apply&tour_id="
+                String url = "http://10.0.2.2/travelholic-app/server/index.php?controller=notification&action=apply&tour_id="
                         + Id + "&sender=" + session.getUsername() + "&receiver=" + creator;
                 Request request = new Request.Builder()
                         .url(url)
@@ -181,18 +181,14 @@ public class TourDetailActivity extends AppCompatActivity {
                     public void onFailure(@NotNull Call call, @NotNull IOException e) { }
 
                     @Override
-                    public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException { }
+                    public void onResponse(@NotNull Call call, @NotNull Response response) { }
                 });
-            }
-            else {
-
             }
         });
     }
 
-
     private void refreshComments() {
-        String url = "http://10.0.2.2/travelholic-app/server/index.php?controller=Tour&action=load_comments&id=" + Id;
+        String url = "http://10.0.2.2/travelholic-app/server/index.php?controller=comment&action=load_all&tour_id=" + Id;
         Request request = new Request.Builder()
                 .url(url)
                 .build();
@@ -201,7 +197,7 @@ public class TourDetailActivity extends AppCompatActivity {
             public void onFailure(@NotNull Call call, @NotNull IOException e) { }
 
             @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+            public void onResponse(@NotNull Call call, @NotNull Response response) {
                 TourDetailActivity.this.runOnUiThread(() -> {
                     List<Comment> comments = new Vector<>();
                     try {

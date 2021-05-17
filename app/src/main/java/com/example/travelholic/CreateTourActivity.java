@@ -55,7 +55,9 @@ public class CreateTourActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_tour);
-        init();
+        map();
+        initSpinnerAdapter();
+        session = new Session(CreateTourActivity.this);
 
         btnTourImage.setOnClickListener(v -> {
             Intent intent = new Intent(Intent.ACTION_PICK);
@@ -83,16 +85,14 @@ public class CreateTourActivity extends AppCompatActivity {
                     .addFormDataPart("note", txtTourNote.getText().toString())
                     .addFormDataPart("image", base64Data)
                     .build();
-            String url = "http://10.0.2.2/travelholic-app/server/index.php?controller=Tour&action=create";
+            String url = "http://10.0.2.2/travelholic-app/server/index.php?controller=tour&action=create";
             Request request = new Request.Builder()
                     .url(url)
                     .post(body)
                     .build();
-
             client.newCall(request).enqueue(new Callback() {
                 @Override
-                public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                }
+                public void onFailure(@NotNull Call call, @NotNull IOException e) { }
 
                 @Override
                 public void onResponse(@NotNull Call call, @NotNull Response response) {
@@ -116,9 +116,8 @@ public class CreateTourActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == SELECT_PHOTO && resultCode == RESULT_OK) {
-            Uri uri = data.getData();
             try {
-                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
                 ivTourImage.setImageBitmap(bitmap);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -126,7 +125,7 @@ public class CreateTourActivity extends AppCompatActivity {
         }
     }
 
-    private void init() {
+    private void map() {
         txtTourName = findViewById(R.id.txt_tour_name);
         spnTourType = findViewById(R.id.spn_tour_type);
         spnTourStatus = findViewById(R.id.spn_tour_status);
@@ -138,7 +137,9 @@ public class CreateTourActivity extends AppCompatActivity {
         btnTourImage = findViewById(R.id.btn_tour_image);
         ivTourImage = findViewById(R.id.iv_tour_image);
         btnCreate = findViewById(R.id.btn_tour_create);
+    }
 
+    private void initSpinnerAdapter() {
         ArrayAdapter<CharSequence> typeAdapter = ArrayAdapter.createFromResource(
                 CreateTourActivity.this, R.array.tour_type, R.layout.support_simple_spinner_dropdown_item);
         spnTourType.setAdapter(typeAdapter);
@@ -146,7 +147,5 @@ public class CreateTourActivity extends AppCompatActivity {
         ArrayAdapter<CharSequence> statusAdapter = ArrayAdapter.createFromResource(
                 CreateTourActivity.this, R.array.tour_status, R.layout.support_simple_spinner_dropdown_item);
         spnTourStatus.setAdapter(statusAdapter);
-
-        session = new Session(CreateTourActivity.this);
     }
 }
