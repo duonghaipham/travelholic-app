@@ -69,19 +69,19 @@ public class ToursFragment extends Fragment {
 
         rvTours.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), rvTours, (v, position) ->  {
             Intent intent = new Intent(getActivity(), TourDetailActivity.class);
+            if (!svTour.getQuery().toString().isEmpty())
+                intent.putExtra("keyword", svTour.getQuery().toString());
             intent.putExtra("position", position);
             startActivity(intent);
         }));
 
         svTour.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public boolean onQueryTextSubmit(String query) {
-                search(query);
-                return false;
-            }
+            public boolean onQueryTextSubmit(String query) { return false; }
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                search(newText);
                 if (newText.isEmpty())
                     loadAll();
                 return false;

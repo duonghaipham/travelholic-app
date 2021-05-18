@@ -16,6 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.travelholic.helper.CircleTransform;
 import com.example.travelholic.helper.Session;
 import com.google.android.gms.common.util.Base64Utils;
 import com.squareup.picasso.Picasso;
@@ -171,7 +172,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
                     try {
                         JSONObject jsonObject = new JSONObject(response.body().string());
                         String url = "http://10.0.2.2/travelholic-app/server/" + jsonObject.getString("avatar");
-                        Picasso.get().load(url).into(ivUpdateAvatar);
+                        Picasso.get().load(url).transform(new CircleTransform()).into(ivUpdateAvatar);
                         txtUpdateFullname.setText(jsonObject.getString("fullname"));
                         tvUsername.setText(String.format(getString(R.string.at), session.getUsername()));
                         txtUpdateEmail.setText(jsonObject.getString("email"));

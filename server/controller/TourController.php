@@ -27,6 +27,27 @@ class TourController extends BaseController {
         }
     }
 
+    public function update() {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+
+            $update_tour = $this->tour_model->update(
+                trim($_POST['id']),
+                trim($_POST['creator']),
+                trim($_POST['tour_name']),
+                trim($_POST['type']),
+                trim($_POST['status']),
+                trim($_POST['departure']),
+                trim($_POST['destination']),
+                trim($_POST['during']),
+                trim($_POST['members']),
+                trim($_POST['note']),
+                trim($_POST['image'])
+            );
+            echo json_encode($update_tour);
+        }
+    }
+
     public function load_all() {
         if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             $tours = $this->tour_model->load_all();
@@ -43,7 +64,10 @@ class TourController extends BaseController {
 
     public function get_detail() {
         if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-            $tour = $this->tour_model->load_by_position($_GET['position']);
+            $tour = $this->tour_model->load_by_position(
+                $_GET['position'],
+                $_GET['keyword']
+            );
             echo json_encode($tour);
         }
     }

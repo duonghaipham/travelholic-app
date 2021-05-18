@@ -68,8 +68,7 @@ public class CreateTourActivity extends AppCompatActivity {
         btnCreate.setOnClickListener(v -> {
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.PNG, 0, stream);
-            byte[] bitmapData = stream.toByteArray();
-            String base64Data = Base64Utils.encode(bitmapData);
+            String base64Data = Base64Utils.encode(stream.toByteArray());
 
             OkHttpClient client = new OkHttpClient();
             RequestBody body = new MultipartBody.Builder()

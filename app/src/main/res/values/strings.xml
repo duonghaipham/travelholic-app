@@ -40,6 +40,8 @@
     <string name="verification">Verification code</string>
     <string name="search_hint">Seach tours…</string>
     <string name="at">\@%1$s</string>
+    <string name="apply">Apply</string>
+    <string name="update">Update</string>
 
     <string-array name="tour_type">
         <item>The weekend break</item>

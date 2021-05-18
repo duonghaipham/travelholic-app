@@ -38,7 +38,7 @@ public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<CommentRecy
     @Override
     public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
         String url = "http://10.0.2.2/travelholic-app/server/" + comments.get(position).getAvatar();
-        Picasso.get().load(url).into(holder.ivAvatar);
+        Picasso.get().load(url).transform(new CircleTransform()).into(holder.ivAvatar);
         holder.tvFullname.setText(comments.get(position).getFullname());
         holder.tvContent.setText(comments.get(position).getContent());
     }

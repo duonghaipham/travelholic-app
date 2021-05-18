@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.example.travelholic.R;
 import com.example.travelholic.UpdateProfileActivity;
+import com.example.travelholic.helper.CircleTransform;
 import com.example.travelholic.helper.Session;
 import com.google.android.gms.common.util.Base64Utils;
 import com.squareup.picasso.Picasso;
@@ -101,7 +102,7 @@ public class ProfileFragment extends Fragment {
                     try {
                         JSONObject jsonObject = new JSONObject(response.body().string());
                         String url = "http://10.0.2.2/travelholic-app/server/" + jsonObject.getString("avatar");
-                        Picasso.get().load(url).into(ivAvatar);
+                        Picasso.get().load(url).transform(new CircleTransform()).into(ivAvatar);
                         tvFullname.setText(jsonObject.getString("fullname"));
                         tvUsername.setText(String.format(getString(R.string.at), session.getUsername()));
                         tvEmail.setText(jsonObject.getString("email"));
