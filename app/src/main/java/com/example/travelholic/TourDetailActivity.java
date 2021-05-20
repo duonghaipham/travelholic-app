@@ -1,6 +1,7 @@
 package com.example.travelholic;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -11,9 +12,11 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.travelholic.helper.Comment;
-import com.example.travelholic.helper.CommentRecyclerViewAdapter;
+import com.example.travelholic.adapter.MemberPresentationRecyclerViewAdapter;
+import com.example.travelholic.model.Comment;
+import com.example.travelholic.adapter.CommentRecyclerViewAdapter;
 import com.example.travelholic.helper.Session;
+import com.example.travelholic.model.Member;
 import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
@@ -45,6 +48,7 @@ public class TourDetailActivity extends AppCompatActivity {
     private TextView tvTo;
     private TextView tvDuring;
     private TextView tvNote;
+    private RecyclerView rvMembers;
     private ImageView ivAvatar;
     private Button btnApply;
 
@@ -88,6 +92,20 @@ public class TourDetailActivity extends AppCompatActivity {
                         tvNote.setText(jsonObject.getString("note"));
                         String urlImage = "http://10.0.2.2/travelholic-app/server/" + jsonObject.getString("image");
                         Picasso.get().load(urlImage).into(ivAvatar);
+                        JSONArray jsonArray = jsonObject.getJSONArray("members");
+                        List<Member> members = new Vector<>();
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject member = jsonArray.getJSONObject(i);
+                            members.add(new Member(
+                                    member.getString("avatar"),
+                                    member.getString("username")
+                            ));
+                        }
+                        MemberPresentationRecyclerViewAdapter adapter = new MemberPresentationRecyclerViewAdapter(
+                                TourDetailActivity.this, members);
+                        rvMembers.setLayoutManager(new GridLayoutManager(TourDetailActivity.this, 4));
+                        rvMembers.setAdapter(adapter);
+
                         refreshComments();
                     } catch (JSONException | IOException e) {
                         e.printStackTrace();
@@ -150,6 +168,7 @@ public class TourDetailActivity extends AppCompatActivity {
         tvTo = findViewById(R.id.tv_tour_destination);
         tvDuring = findViewById(R.id.tv_tour_during);
         tvNote = findViewById(R.id.tv_tour_note);
+        rvMembers = findViewById(R.id.rv_members);
         ivAvatar = findViewById(R.id.iv_tour_image);
         btnApply = findViewById(R.id.btn_apply);
 

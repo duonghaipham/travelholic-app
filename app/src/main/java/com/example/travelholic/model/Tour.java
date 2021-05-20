@@ -1,4 +1,4 @@
-package com.example.travelholic.helper;
+package com.example.travelholic.model;
 
 public class Tour {
     private String tourName;

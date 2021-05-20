@@ -13,8 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.travelholic.R;
-import com.example.travelholic.helper.Notification;
-import com.example.travelholic.helper.NotificationRecyclerViewAdapter;
+import com.example.travelholic.model.Notification;
+import com.example.travelholic.adapter.NotificationRecyclerViewAdapter;
 import com.example.travelholic.helper.Session;
 
 import org.jetbrains.annotations.NotNull;

@@ -14,8 +14,8 @@ import android.view.ViewGroup;
 
 import com.example.travelholic.R;
 import com.example.travelholic.helper.Session;
-import com.example.travelholic.helper.Tour;
-import com.example.travelholic.helper.TourRecyclerViewAdapter;
+import com.example.travelholic.model.Tour;
+import com.example.travelholic.adapter.TourRecyclerViewAdapter;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;

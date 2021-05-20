@@ -1,4 +1,4 @@
-package com.example.travelholic.helper;
+package com.example.travelholic.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -11,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.travelholic.R;
+import com.example.travelholic.helper.CircleTransform;
+import com.example.travelholic.model.Comment;
 import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;

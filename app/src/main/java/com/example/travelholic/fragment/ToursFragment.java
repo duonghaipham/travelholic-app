@@ -18,8 +18,8 @@ import com.example.travelholic.CreateTourActivity;
 import com.example.travelholic.R;
 import com.example.travelholic.TourDetailActivity;
 import com.example.travelholic.helper.RecyclerItemClickListener;
-import com.example.travelholic.helper.Tour;
-import com.example.travelholic.helper.TourRecyclerViewAdapter;
+import com.example.travelholic.model.Tour;
+import com.example.travelholic.adapter.TourRecyclerViewAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.jetbrains.annotations.NotNull;
