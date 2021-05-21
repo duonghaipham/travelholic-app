@@ -19,11 +19,11 @@ class TourModel extends Database {
             "VALUES ('$creator', '$tour_name', '$type', '$status', '$departure', '$destination', '$during', '$note', '$img_path', NOW(), NOW())";
         $this->conn->query($tour_query);
 
-        $this->join_tour($id, $members, $creator);
+        $this->join_tour($id, $members);
         return array('success' => true);
     }
 
-    public function update($id, $creator, $tour_name, $type, $status, $departure, $destination, $during, $members, $note, $image) {
+    public function update($id, $tour_name, $type, $status, $departure, $destination, $during, $members, $note, $image) {
         $img_path = $this->store_image($image);
         $update_tour_query = "UPDATE tour " .
                         "SET tour_name = '$tour_name', " .
@@ -32,8 +32,8 @@ class TourModel extends Database {
                         "departure = '$departure', " .
                         "destination = '$destination', " .
                         "during = '$during', " .
-                        "note = '$note' " .
-                        "image = '$img_path' " .
+                        "note = '$note', " .
+                        "image = '$img_path', " .
                         "updated_at = NOW() " .
                         "WHERE id = $id";
         $this->conn->query($update_tour_query);
@@ -41,8 +41,8 @@ class TourModel extends Database {
         $reset_members_query = "DELETE FROM member WHERE tour_id = $id";
         $this->conn->query($reset_members_query);
 
-        $this->join_tour($id, $members, $creator);
-        return array('success' => true);
+        $this->join_tour($id, $members);
+        return array('success' => true, 'query' => $update_tour_query);
     }
 
     public function load_all() {
@@ -120,8 +120,8 @@ class TourModel extends Database {
     }
 
     // insert username and tour_id into `member`
-    private function join_tour($id, $members, $creator) {
-        $list_users = explode(' ', $members . ' ' . $creator);
+    private function join_tour($id, $members) {
+        $list_users = explode(' ', $members);
         foreach ($list_users as $item) {
             $member_query = "INSERT INTO member (tour_id, user) VALUES ($id, '$item')";
             $this->conn->query($member_query);

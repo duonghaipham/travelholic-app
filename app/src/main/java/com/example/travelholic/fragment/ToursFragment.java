@@ -63,7 +63,7 @@ public class ToursFragment extends Fragment {
 
         fabCreateTour.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), CreateTourActivity.class);
-            intent.putExtra("create", false);
+            intent.putExtra("mode", "create");
             startActivity(intent);
         });
 

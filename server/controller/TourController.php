@@ -33,7 +33,6 @@ class TourController extends BaseController {
 
             $update_tour = $this->tour_model->update(
                 trim($_POST['id']),
-                trim($_POST['creator']),
                 trim($_POST['tour_name']),
                 trim($_POST['type']),
                 trim($_POST['status']),
