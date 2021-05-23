@@ -49,10 +49,7 @@ CREATE TABLE tour_comment(
     user VARCHAR(100),
     tour_id INT,
     content VARCHAR(500) CHARSET utf8,
-    rate INT,
-    active BOOL,
     created_at DATETIME,
-    deleted_at DATETIME,
     PRIMARY KEY (id)
 );
 
@@ -61,7 +58,6 @@ CREATE TABLE notification(
     tour_id INT,
     sender VARCHAR(100),
     receiver VARCHAR(100),
-    type VARCHAR(20),
     status VARCHAR(20),
     PRIMARY KEY (id)
 );
@@ -72,6 +68,9 @@ CHECK (role IN ('admin', 'general'));
 
 ALTER TABLE user
 ALTER role SET DEFAULT 'general';
+
+ALTER TABLE notification
+ALTER status SET DEFAULT 'pending';
 
 ALTER TABLE user
 ADD CONSTRAINT UNI_EMAIL
@@ -89,12 +88,8 @@ ADD CONSTRAINT CHK_TOUR_STATUS
 CHECK (status IN ('Open', 'Closed', 'In-progress', 'Prepared', 'Done', 'Delayed'));
 
 ALTER TABLE notification
-ADD CONSTRAINT CK_NOTIFICATION_TYPE
-CHECK (status IN ('invite', 'apply', 'comment', 'rate'));
-
-ALTER TABLE notification
 ADD CONSTRAINT CHK_NOTIFICATION_STATUS
-CHECK (status IN ('Pending', 'Accept', 'Decline'));
+CHECK (status IN ('pending', 'joined'));
 
 ALTER TABLE tour
 ADD CONSTRAINT FK_USER_AS_TOUR_CREATOR

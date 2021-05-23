@@ -45,6 +45,8 @@
     <string name="name">Name</string>
     <string name="from">From</string>
     <string name="to">TO</string>
+    <string name="accepted">Accepted</string>
+    <string name="applied">Applied</string>
 
     <string-array name="tour_type">
         <item>The weekend break</item>
