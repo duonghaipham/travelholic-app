@@ -29,6 +29,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Timer;
 import java.util.Vector;
 
 import okhttp3.Call;
@@ -41,9 +42,8 @@ import okhttp3.Response;
 
 public class ToursFragment extends Fragment {
 
-    private static final int CREATE_TOUR_CODE = 1;
-    private static final int VIEW_TOUR_CODE = 0;
     private List<Tour> tours;
+    private TourRecyclerViewAdapter adapter;
 
     private SearchView svTour;
     private RecyclerView rvTours;
@@ -58,16 +58,17 @@ public class ToursFragment extends Fragment {
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        tours = new Vector<>();
+        adapter = new TourRecyclerViewAdapter(getActivity(), tours);
+
         svTour = view.findViewById(R.id.sv_tour);
         rvTours = view.findViewById(R.id.rv_tours);
         fabCreateTour = view.findViewById(R.id.fab_create_tour);
-        tours = new Vector<>();
-        loadAll();
 
         fabCreateTour.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), CreateTourActivity.class);
             intent.putExtra("mode", "create");
-            startActivityForResult(intent, CREATE_TOUR_CODE);
+            startActivity(intent);
         });
 
         rvTours.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), rvTours, (v, position) ->  {
@@ -75,7 +76,7 @@ public class ToursFragment extends Fragment {
             if (!svTour.getQuery().toString().isEmpty())
                 intent.putExtra("keyword", svTour.getQuery().toString());
             intent.putExtra("position", position);
-            startActivityForResult(intent, VIEW_TOUR_CODE);
+            startActivity(intent);
         }));
 
         svTour.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -93,10 +94,9 @@ public class ToursFragment extends Fragment {
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == CREATE_TOUR_CODE)
-            loadAll();
+    public void onResume() {
+        super.onResume();
+        loadAll();
     }
 
     private void loadAll() {
@@ -141,9 +141,10 @@ public class ToursFragment extends Fragment {
                         ));
                     }
                     getActivity().runOnUiThread(() -> {
-                        TourRecyclerViewAdapter adapter = new TourRecyclerViewAdapter(getActivity(), tours);
+                        adapter = new TourRecyclerViewAdapter(getActivity(), tours);
                         rvTours.setLayoutManager(new LinearLayoutManager(getActivity()));
                         rvTours.setAdapter(adapter);
+                        adapter.notifyDataSetChanged();
                     });
                 } catch (JSONException e) {
                     e.printStackTrace();
