@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Travelholicapp"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ProfileActivity"></activity>
+        <activity android:name=".ProfileActivity"/>
         <activity android:name=".TourDetailActivity" />
         <activity android:name=".UpdateProfileActivity" />
         <activity android:name=".CreateTourActivity" />

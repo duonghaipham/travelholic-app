@@ -1,6 +1,7 @@
 package com.example.travelholic;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -23,6 +24,7 @@ import java.util.Vector;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final int FINISH = 1;
     private ViewPager vpMain;
     private TabLayout tlMain;
 
@@ -60,11 +62,18 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.profile:
                 Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, FINISH);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == FINISH)
+            finish();
     }
 
     private static class PageAdapter extends FragmentPagerAdapter {
